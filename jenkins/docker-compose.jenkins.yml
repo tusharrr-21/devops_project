@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jenkins-sms
+    ports:
+      - "8080:8080"      # Jenkins UI
+      - "50000:50000"    # Jenkins agent port
+    volumes:
+      # Persist Jenkins data (jobs, plugins, config)
+      - jenkins_home:/var/jenkins_home
+      # Share host Docker socket so Jenkins can run docker commands
+      - //./pipe/docker_engine://./pipe/docker_engine
+      # Mount the project source code into Jenkins workspace
+      - ../:/workspace
+    environment:
+      - DOCKER_HOST=npipe:////./pipe/docker_engine
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:

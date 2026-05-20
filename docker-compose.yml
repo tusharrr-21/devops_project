@@ -1,6 +1,7 @@
 # Smart Student Management System — local run with Docker Engine / Compose
 # From this folder: docker compose up --build
-# UI: http://localhost:3000  |  API: http://localhost:5000/api
+# UI: http://localhost:3001  |  API: http://localhost:5000/api
+# (Host port 3001 avoids conflict with local "npm start" on 3000)
 
 services:
   app:
@@ -12,7 +13,7 @@ services:
         EXPOSE_PORT: "3000"
     container_name: sms-frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     restart: unless-stopped
     depends_on:
       - api

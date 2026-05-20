@@ -10,9 +10,17 @@ const portalRoutes  = require('./routes/portalRoutes');
 const app  = express();
 const PORT = process.env.PORT || 5000;
 
-// ── CORS — allow frontend origin ──────────────────────────
+// ── CORS — allow any localhost/127.0.0.1 origin ──────────
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+    // Allow any localhost or 127.0.0.1 on any port
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error('CORS: origin not allowed — ' + origin));
+  },
   credentials: true
 }));
 
